@@ -1,6 +1,8 @@
 package com.asgarov.aktienVerwaltung;
 
-public class HashTable {
+import java.io.Serializable;
+
+public class HashTable implements Serializable {
     private Aktie[] table;
     public static final int SIZE = 1000;
     public static final int PRIME_NUMBER = 31;
