@@ -13,8 +13,8 @@ public class Reader {
 
     public static List<String> readCSV(String fileName) throws IOException {
         List<String> records = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(PATH_TO_RESOURCES + fileName + CSV_EXTENTION
-        ))) {
+        try (BufferedReader br = new BufferedReader(
+                new FileReader(PATH_TO_RESOURCES + fileName + CSV_EXTENTION))) {
             String line;
             while ((line = br.readLine()) != null) {
                 records.add(line);

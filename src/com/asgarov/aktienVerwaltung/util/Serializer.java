@@ -23,7 +23,7 @@ public class Serializer {
     }
 
     public static HashTable loadHashTableFromFile() throws IOException, ClassNotFoundException {
-        if(!new File(PATH_TO_RESOURCES + SAVED_FILE_NAME).exists()) {
+        if (!new File(PATH_TO_RESOURCES + SAVED_FILE_NAME).exists()) {
             System.out.println(TABLE_NOT_FOUND_MESSAGE);
             return null;
         }

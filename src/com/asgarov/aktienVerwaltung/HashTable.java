@@ -43,17 +43,17 @@ public class HashTable implements Serializable {
         return finalHash;
     }
 
-    public static int hashCode(String name){
+    public static int hashCode(String name) {
         int hash = 1;
         char[] nameArray = name.toCharArray();
         for (char c : nameArray) {
-            hash = PRIME_NUMBER * hash  + c;
+            hash = PRIME_NUMBER * hash + c;
         }
         return Math.abs(hash % HashTable.SIZE);
     }
 
     public boolean deleteAktie(String searchParameter) {
-        if(findAktie(searchParameter) == null) {
+        if (findAktie(searchParameter) == null) {
             return false;
         }
 

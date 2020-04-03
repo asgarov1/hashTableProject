@@ -57,7 +57,7 @@ public class Aktie implements Serializable {
     }
 
     public void plot() {
-        if(kursDaten.isEmpty()) {
+        if (kursDaten.isEmpty()) {
             System.out.println("Kurs Daten must be imported before they can be plotted");
             return;
         }
@@ -65,7 +65,7 @@ public class Aktie implements Serializable {
         kursDaten.forEach(k -> {
             System.out.print(k.getDate() + ": ");
             int close = Integer.parseInt(k.getClose().substring(0, k.getClose().indexOf(".")));
-            for (int i = 0; i < close ; i++) {
+            for (int i = 0; i < close; i++) {
                 System.out.print("*");
             }
             System.out.println();
