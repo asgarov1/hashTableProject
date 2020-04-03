@@ -72,7 +72,7 @@ public class Aktie implements Serializable {
 
     /**
      * For each KursDatei in the list
-     * Date is outputted following by the amount of starts corresponsing to the close value of the object
+     * Date is outputted following by the amount of starts corresponding to the close value of the object
      */
     public void plot() {
         if (kursDaten.isEmpty()) {
@@ -82,8 +82,10 @@ public class Aktie implements Serializable {
 
         kursDaten.forEach(k -> {
             System.out.print(k.getDate() + ": ");
+            //parsing close value of the Aktie from String
             int close = Integer.parseInt(k.getClose().substring(0, k.getClose().indexOf(".")));
-            for (int i = 0; i < close; i++) {
+
+            for (int i = 0; i < close/4; i++) {  //dividing the length of output for 4 so that it fits better on the screen
                 System.out.print("*");
             }
             System.out.println();

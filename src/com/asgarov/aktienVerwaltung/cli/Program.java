@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-/* CLI interface and logic of the program */
+/* CLI interface and logic of the program menu */
 public class Program {
 
     public static final String NO_AKTIE_FOUND_MESSAGE = "No Aktie found under such name. Keep in mind that due to the nature of hash functions input is case sensitive";
@@ -20,12 +20,11 @@ public class Program {
     private static final String PLOT = "PLOT";
     private static final String SAVE = "SAVE";
     private static final String LOAD = "LOAD";
-    private static final String EXIT = "QUIT";
+    private static final String QUIT = "QUIT";
     private static final String STARTING_MESSAGE = "Please enter a command (case insensitive). Available commands are:";
     private static final String SUCCESS = "SUCCESS";
     private static final String ANSWER_SIGN = "=>";
-
-    private static final String HASHTABLE_FILE_NAME = "hashtable.txt";
+    public static final String NO_FILE_NAME_ENTERED = "Error, no file name was entered";
 
     private List<String> commands;
     private Scanner scanner;
@@ -44,7 +43,7 @@ public class Program {
         commands.add(PLOT);
         commands.add(SAVE + " [file_name]");
         commands.add(LOAD + " [file_name]");
-        commands.add(EXIT);
+        commands.add(QUIT);
     }
 
     /**
@@ -52,7 +51,7 @@ public class Program {
      */
     public void start() {
         String input = "";
-        while (!input.toUpperCase().contains("QUIT")) {
+        while (!input.toUpperCase().contains(QUIT)) {
             drawBeforeMenuLine();
             System.out.println(STARTING_MESSAGE);
             commands.forEach(s -> System.out.print(s + " | "));
@@ -68,40 +67,60 @@ public class Program {
      * This method executed the corresponding method vase on the input (case insensitive)
      */
     private void executeCommand(String input) {
-        input = input.toUpperCase();
+        String inputUpperCase = input.toUpperCase();
 
-        if (input.contains(ADD)) {
+        if (inputUpperCase.contains(ADD)) {
             executeAdd();
-        } else if (input.contains(DELETE)) {
+        } else if (inputUpperCase.contains(DELETE)) {
             executeDelete();
-        } else if (input.contains(IMPORT)) {
+        } else if (inputUpperCase.contains(IMPORT)) {
             executeImport();
-        } else if (input.contains(SEARCH)) {
+        } else if (inputUpperCase.contains(SEARCH)) {
             executeSearch();
-        } else if (input.contains(PLOT)) {
+        } else if (inputUpperCase.contains(PLOT)) {
             executePlot();
-        } else if (input.contains(SAVE)) {
-            executeSave();
-        } else if (input.contains(LOAD)) {
-            executeLoad();
+        } else if (inputUpperCase.contains(SAVE)) {
+            try {
+                executeSave(getFileName(input));
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println(ANSWER_SIGN + NO_FILE_NAME_ENTERED);
+                return;
+            }
+        } else if (inputUpperCase.contains(LOAD)) {
+            try {
+                executeLoad(getFileName(input));
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println(ANSWER_SIGN + NO_FILE_NAME_ENTERED);
+                return;
+            }
+        } else if (!inputUpperCase.contains(QUIT)) {
+            System.out.println(ANSWER_SIGN + "Command not recognized. Try again.");
         }
         System.out.println();
+    }
+
+    private String getFileName(String input) {
+        return input.split(" ")[1];
     }
 
     /**
      * Executes load function: loads hashtable from previously saved file
      */
-    private void executeLoad() {
+    private void executeLoad(String fileName) {
+        if (fileName == null) {
+            return;
+        }
+
         HashTable hashTable = null;
         try {
-            hashTable = (HashTable) Serializer.loadObjectFromFile(HASHTABLE_FILE_NAME);
+            hashTable = (HashTable) Serializer.loadObjectFromFile(fileName);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         if (hashTable != null) {
             this.hashTable = hashTable;
-            System.out.println(SUCCESS + ": ");
+            System.out.print(ANSWER_SIGN + SUCCESS + ": ");
             System.out.println("hashtable loaded.");
         }
     }
@@ -109,9 +128,14 @@ public class Program {
     /**
      * Executes save function: saves hashtable to a file
      */
-    private void executeSave() {
+    private void executeSave(String fileName) {
+        if (fileName == null || fileName.length() < 1) {
+            System.out.println("Error, no file name was entered");
+            return;
+        }
+
         try {
-            Serializer.saveObjectToFile(hashTable, HASHTABLE_FILE_NAME);
+            Serializer.saveObjectToFile(hashTable, fileName);
         } catch (IOException e) {
             System.out.println("Problem saving hashTable.");
         }
@@ -201,7 +225,7 @@ public class Program {
         boolean keepGoing = true;
         while (keepGoing) {
             System.out.print(ANSWER_SIGN + ADD + ": ");
-            System.out.println("Please enter the name, WKN and Kuerzel of the Aktie, seperated by SPACE.");
+            System.out.println("Please enter the Name, WKN and Kuerzel of the Aktie, seperated by SPACE.");
             String[] parameters = scanner.nextLine().split(" ");
             Aktie aktie;
             try {
