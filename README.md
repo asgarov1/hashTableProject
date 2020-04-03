@@ -19,6 +19,6 @@ src/resources/ folder.
 
 Have fun using this program.
 
-Created by:
-Javid Asgarov &
+Created by: <br>
+Javid Asgarov & <br>
 Agnaldo Oliveira Moura Junior

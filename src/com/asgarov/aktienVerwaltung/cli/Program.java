@@ -12,7 +12,8 @@ import java.util.Scanner;
 /* CLI interface and logic of the program menu */
 public class Program {
 
-    public static final String NO_AKTIE_FOUND_MESSAGE = "No Aktie found under such name. Keep in mind that due to the nature of hash functions input is case sensitive";
+    public static final String NO_AKTIE_FOUND_MESSAGE = "No Aktie found under such name. Keep in mind that due to the "
+            + "nature of hash functions input is case sensitive";
     private static final String ADD = "ADD";
     private static final String DELETE = "DELETE";
     private static final String IMPORT = "IMPORT";
@@ -25,6 +26,8 @@ public class Program {
     private static final String SUCCESS = "SUCCESS";
     private static final String ANSWER_SIGN = "=>";
     public static final String NO_FILE_NAME_ENTERED = "Error, no file name was entered";
+    public static final String FILE_NAME = " [file_name]";
+    public static final String COMMAND_NOT_RECOGNIZED = "Command not recognized. Try again.";
 
     private List<String> commands;
     private Scanner scanner;
@@ -41,8 +44,8 @@ public class Program {
         commands.add(IMPORT);
         commands.add(SEARCH);
         commands.add(PLOT);
-        commands.add(SAVE + " [file_name]");
-        commands.add(LOAD + " [file_name]");
+        commands.add(SAVE + FILE_NAME);
+        commands.add(LOAD + FILE_NAME);
         commands.add(QUIT);
     }
 
@@ -52,7 +55,7 @@ public class Program {
     public void start() {
         String input = "";
         while (!input.toUpperCase().contains(QUIT)) {
-            drawBeforeMenuLine();
+            drawLineBeforeMenu();
             System.out.println(STARTING_MESSAGE);
             commands.forEach(s -> System.out.print(s + " | "));
             System.out.println();
@@ -94,7 +97,7 @@ public class Program {
                 return;
             }
         } else if (!inputUpperCase.contains(QUIT)) {
-            System.out.println(ANSWER_SIGN + "Command not recognized. Try again.");
+            System.out.println(ANSWER_SIGN + COMMAND_NOT_RECOGNIZED);
         }
         System.out.println();
     }
@@ -129,8 +132,7 @@ public class Program {
      * Executes save function: saves hashtable to a file
      */
     private void executeSave(String fileName) {
-        if (fileName == null || fileName.length() < 1) {
-            System.out.println("Error, no file name was entered");
+        if (fileName == null) {
             return;
         }
 
@@ -183,7 +185,7 @@ public class Program {
 
         aktie.getKursDaten().forEach(System.out::println);
         System.out.print(ANSWER_SIGN + SUCCESS + ": ");
-        System.out.println("KursDaten for the Aktie were successfully imported and saved in the Aktie.");
+        System.out.println("Kurs Daten for the Aktie were successfully imported and saved in the Aktie.");
     }
 
     /**
@@ -244,7 +246,7 @@ public class Program {
     /**
      * Formatting method: draws a line before initial (recurring) options message
      */
-    private void drawBeforeMenuLine() {
+    private void drawLineBeforeMenu() {
         for (int i = 0; i < STARTING_MESSAGE.length(); i++) {
             System.out.print("_");
         }
