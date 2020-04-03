@@ -1,10 +1,11 @@
-package com.asgarov.aktienVerwaltung;
+package com.asgarov.aktienVerwaltung.table;
 
 import com.asgarov.aktienVerwaltung.util.Reader;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,15 +33,28 @@ public class Aktie implements Serializable {
         kursDaten = new ArrayList<>();
     }
 
+    /**
+     * This method reads the 'KursDaten' from a file as a List of String lines
+     * following which they are reverse sorted to bring latest ones up,
+     * and added each into the list of KursDatei
+     * @throws IOException
+     */
     public void addKursDaten() throws IOException {
         List<String> records = Reader.readCSV(getKuerzel());
+
         records.stream()
+                .sorted(Comparator.reverseOrder())
                 .skip(1) //skipping the heading of the file: Date,Open,High,Low,Close,Adj Close,Volume
                 .map(this::transformLineToKursDatei)
                 .limit(30)
                 .forEach(k -> kursDaten.add(k));
     }
 
+    /**
+     * Method transforms each String line into a KursDatei Object
+     * @param line
+     * @return
+     */
     private KursDatei transformLineToKursDatei(String line) {
         String[] values = line.split(COMMA_DELIMITER);
         KursDatei kursDatei = new KursDatei();
@@ -56,6 +70,10 @@ public class Aktie implements Serializable {
         return kursDatei;
     }
 
+    /**
+     * For each KursDatei in the list
+     * Date is outputted following by the amount of starts corresponsing to the close value of the object
+     */
     public void plot() {
         if (kursDaten.isEmpty()) {
             System.out.println("Kurs Daten must be imported before they can be plotted");
@@ -71,6 +89,8 @@ public class Aktie implements Serializable {
             System.out.println();
         });
     }
+
+    // Getters and Setters
 
     public String getName() {
         return name;
@@ -104,6 +124,13 @@ public class Aktie implements Serializable {
         this.kursDaten = kursDaten;
     }
 
+
+    /**
+     * Equals method, that checks whether the Aktie is the same object
+     * based on the value of name field (because that is the field being used to enter objects into hashtable)
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -114,11 +141,20 @@ public class Aktie implements Serializable {
         return Objects.equals(name, aktie.name);
     }
 
+    /**
+     * Hashcode method, which is stored in HashTable class because I needed to use same method for storing and searching
+     * @return
+     */
     @Override
     public int hashCode() {
         return HashTable.hashCode(name);
     }
 
+
+    /**
+     * To String method that allows better display of the object in the console
+     * @return
+     */
     @Override
     public String toString() {
         return "Aktie{" +

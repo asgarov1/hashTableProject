@@ -1,5 +1,7 @@
-package com.asgarov.aktienVerwaltung;
+package com.asgarov.aktienVerwaltung.cli;
 
+import com.asgarov.aktienVerwaltung.table.Aktie;
+import com.asgarov.aktienVerwaltung.table.HashTable;
 import com.asgarov.aktienVerwaltung.util.Serializer;
 
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/* CLI interface and logic of the program */
 public class Program {
 
     public static final String NO_AKTIE_FOUND_MESSAGE = "No Aktie found under such name. Keep in mind that due to the nature of hash functions input is case sensitive";
@@ -22,12 +25,18 @@ public class Program {
     private static final String SUCCESS = "SUCCESS";
     private static final String ANSWER_SIGN = "=>";
 
-    private List<String> commands = new ArrayList<>();
-    private Scanner scanner = new Scanner(System.in);
-    private HashTable hashTable = new HashTable(HashTable.SIZE);
+    private static final String HASHTABLE_FILE_NAME = "hashtable.txt";
+
+    private List<String> commands;
+    private Scanner scanner;
+    private HashTable hashTable;
 
 
     public Program() {
+        this.commands = new ArrayList<>();
+        this.scanner = new Scanner(System.in);
+        this.hashTable = new HashTable(HashTable.SIZE);
+
         commands.add(ADD);
         commands.add(DELETE);
         commands.add(IMPORT);
@@ -38,6 +47,9 @@ public class Program {
         commands.add(EXIT);
     }
 
+    /**
+     * This method starts the CLI and keeps running till 'quit' is entered
+     */
     public void start() {
         String input = "";
         while (!input.toUpperCase().contains("QUIT")) {
@@ -52,6 +64,9 @@ public class Program {
         }
     }
 
+    /**
+     * This method executed the corresponding method vase on the input (case insensitive)
+     */
     private void executeCommand(String input) {
         input = input.toUpperCase();
 
@@ -73,29 +88,38 @@ public class Program {
         System.out.println();
     }
 
+    /**
+     * Executes load function: loads hashtable from previously saved file
+     */
     private void executeLoad() {
         HashTable hashTable = null;
         try {
-            hashTable = Serializer.loadHashTableFromFile();
+            hashTable = (HashTable) Serializer.loadObjectFromFile(HASHTABLE_FILE_NAME);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         if (hashTable != null) {
             this.hashTable = hashTable;
+            System.out.println(SUCCESS + ": ");
+            System.out.println("hashtable loaded.");
         }
-        System.out.println(SUCCESS + ": ");
-        System.out.println("hashtable loaded.");
     }
 
+    /**
+     * Executes save function: saves hashtable to a file
+     */
     private void executeSave() {
         try {
-            Serializer.saveHashtableToFile(hashTable);
+            Serializer.saveObjectToFile(hashTable, HASHTABLE_FILE_NAME);
         } catch (IOException e) {
             System.out.println("Problem saving hashTable.");
         }
     }
 
+    /**
+     * Produces ASCII style plot into the console
+     */
     private void executePlot() {
         System.out.print(ANSWER_SIGN + PLOT + ": ");
         System.out.print("Please enter the name of the (previously added) Aktie you would like to plot: ");
@@ -110,6 +134,10 @@ public class Program {
         aktie.plot();
     }
 
+    /**
+     * Executes import function: imports Kursdaten from a .csv file located in the resources folder
+     * Important: .csv file's name should match Kuerzel of the Aktie
+     */
     private void executeImport() {
         System.out.print(ANSWER_SIGN + IMPORT + ": ");
         System.out.print("Please enter the name of the (previously added) Aktie you would like to import the data to: ");
@@ -129,11 +157,14 @@ public class Program {
             return;
         }
 
-        System.out.print(ANSWER_SIGN + SUCCESS + ": ");
-        System.out.println("KursDaten for the Aktie were successfully imported and saved in the Aktie. Here they are: ");
         aktie.getKursDaten().forEach(System.out::println);
+        System.out.print(ANSWER_SIGN + SUCCESS + ": ");
+        System.out.println("KursDaten for the Aktie were successfully imported and saved in the Aktie.");
     }
 
+    /**
+     * Deletes chosen Aktie from the hashtable
+     */
     private void executeDelete() {
         System.out.print(ANSWER_SIGN + DELETE + ": ");
         System.out.print("Please enter the name of the Aktie you would like to delete: ");
@@ -147,6 +178,9 @@ public class Program {
         }
     }
 
+    /**
+     * Searches for the Aktie in the hashtable via inputted Name
+     */
     private void executeSearch() {
         System.out.print(ANSWER_SIGN + SEARCH + ": ");
         System.out.print("Please enter the NAME of the Aktie you would like to search for: ");
@@ -160,6 +194,9 @@ public class Program {
         }
     }
 
+    /**
+     * Adds Aktie into the hashtable
+     */
     private void executeAdd() {
         boolean keepGoing = true;
         while (keepGoing) {
@@ -180,6 +217,9 @@ public class Program {
         }
     }
 
+    /**
+     * Formatting method: draws a line before initial (recurring) options message
+     */
     private void drawBeforeMenuLine() {
         for (int i = 0; i < STARTING_MESSAGE.length(); i++) {
             System.out.print("_");

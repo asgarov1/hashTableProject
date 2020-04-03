@@ -1,7 +1,8 @@
-package com.asgarov.aktienVerwaltung;
+package com.asgarov.aktienVerwaltung.table;
 
 import java.io.Serializable;
 
+/* Simple DTO */
 public class KursDatei implements Serializable {
 
     private String date;
