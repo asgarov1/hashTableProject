@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static com.asgarov.aktienVerwaltung.util.Reader.PATH_TO_RESOURCES;
+
 /* CLI interface and logic of the program menu */
 public class Program {
 
@@ -102,8 +104,14 @@ public class Program {
         System.out.println();
     }
 
+    /**
+     * Gets the file name from the entered line
+     * @param input
+     * @return
+     */
     private String getFileName(String input) {
-        return input.split(" ")[1];
+        int fileNameIndex = 1;
+        return input.split(" ")[fileNameIndex];
     }
 
     /**
@@ -144,7 +152,7 @@ public class Program {
     }
 
     /**
-     * Produces ASCII style plot into the console
+     * Produces ASCII style plot (chart) into the console
      */
     private void executePlot() {
         System.out.print(ANSWER_SIGN + PLOT + ": ");
@@ -179,7 +187,7 @@ public class Program {
             aktie.addKursDaten();
         } catch (IOException e) {
             System.out.println(ANSWER_SIGN + "No file found under the Aktien's Kuerzel name.");
-            System.out.println(ANSWER_SIGN + "Please add the necessary .csv file to src/resources");
+            System.out.println(ANSWER_SIGN + "Please add the necessary .csv file to " + PATH_TO_RESOURCES);
             return;
         }
 

@@ -82,10 +82,10 @@ public class Aktie implements Serializable {
 
         kursDaten.forEach(k -> {
             System.out.print(k.getDate() + ": ");
-            //parsing close value of the Aktie from String
+            //parsing 'close' value of the Aktie from String
             int close = Integer.parseInt(k.getClose().substring(0, k.getClose().indexOf(".")));
 
-            for (int i = 0; i < close/4; i++) {  //dividing the length of output for 4 so that it fits better on the screen
+            for (int i = 0; i < close/4; i++) {  //dividing the length of output by 4 so that it fits better on the screen
                 System.out.print("*");
             }
             System.out.println();
@@ -129,7 +129,7 @@ public class Aktie implements Serializable {
 
     /**
      * Equals method, that checks whether the Aktie is the same object
-     * based on the value of name field (because that is the field being used to enter objects into hashtable)
+     * based on the value of the name field (because that is the field being used to enter objects into hashtable)
      * @param o
      * @return
      */
@@ -144,7 +144,7 @@ public class Aktie implements Serializable {
     }
 
     /**
-     * Hashcode method, which is stored in HashTable class because I needed to use same method for storing and searching
+     * Hashcode method, which is stored in HashTable class because I needed to use same hash method everywhere
      * @return
      */
     @Override

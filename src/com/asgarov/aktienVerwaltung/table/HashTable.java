@@ -14,7 +14,7 @@ public class HashTable implements Serializable {
 
     /**
      * Places Aktie object into the hashtable array using hashing function to determine index
-     * For collision handling a quadratic 'sondierung' is used
+     * For collision handling a 'quadratische Sondierung' is used
      * @param aktie
      */
     public void placeData(Aktie aktie) {
