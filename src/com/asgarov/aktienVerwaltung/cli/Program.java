@@ -11,7 +11,9 @@ import java.util.Scanner;
 
 import static com.asgarov.aktienVerwaltung.util.Reader.PATH_TO_RESOURCES;
 
-/* CLI interface and logic of the program menu */
+/**
+ *  CLI interface and logic of the program menu
+ */
 public class Program {
 
     public static final String NO_AKTIE_FOUND_MESSAGE = "No Aktie found under such name. Keep in mind that due to the "
