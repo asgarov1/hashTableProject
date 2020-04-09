@@ -20,8 +20,16 @@ public class HashTable implements Serializable {
     public void placeData(Aktie aktie) {
         int index = 0;
         int finalHash = aktie.hashCode();
+
+        int count = 0;
         while (table[finalHash] != null) {
             finalHash = (aktie.hashCode() + (++index * index)) % SIZE;
+            count++;
+        }
+
+        //Hard to reproduce such scenario but it is theoretically possible
+        if(count > SIZE) {
+            throw new RuntimeException("ERROR: Collision handling can't find a place in the hashtable.");
         }
 
         table[finalHash] = aktie;
