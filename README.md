@@ -14,7 +14,7 @@ Alternatively you can choose to not load the hashtable and use the hashtable fro
 While commands themselves are case insensitive, the nature of the hash functions makes NAME field 
 (the field that is used for hashing) case sensitive, and you have to enter it exactly the same for search and import.
 Also, eventhough you need to enter the Name field for all commands it is the Kuerzel that is going to be used to look 
-for .csv file to import.Therefore .csv file's name should match the Kuerzel of the Aktie and also needs to be located at
+for .csv file to import. Therefore .csv file's name should match the Kuerzel of the Aktie and also needs to be located at
 src/resources/ folder.
 
 Have fun using this program.
