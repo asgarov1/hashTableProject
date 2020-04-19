@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 public class HashTable implements Serializable {
 
-    private Aktie[] table;
+    private final Aktie[] table;
     public static final int SIZE = 1000;
     public static final int PRIME_NUMBER = 31;
+    private static int collisionsCount = 0;
 
     public HashTable(int tableSize) {
         table = new Aktie[tableSize];
@@ -19,20 +20,16 @@ public class HashTable implements Serializable {
      */
     public void placeData(Aktie aktie) {
         int index = 0;
-        int finalHash = aktie.hashCode();
+        int hash = aktie.hashCode();
 
-        int count = 0;
-        while (table[finalHash] != null) {
-            finalHash = (aktie.hashCode() + (++index * index)) % SIZE;
-            count++;
+        while (table[hash] != null) {
+            hash = Math.abs(aktie.hashCode() + (++index * index)) % SIZE;
+            collisionsCount++;
+            if(collisionsCount > SIZE * SIZE) {
+                throw new RuntimeException("ERROR: Collision handling can't find a place in the hashtable.");
+            }
         }
-
-        //Hard to reproduce such scenario but it is theoretically possible
-        if(count > SIZE) {
-            throw new RuntimeException("ERROR: Collision handling can't find a place in the hashtable.");
-        }
-
-        table[finalHash] = aktie;
+        table[hash] = aktie;
     }
 
     /**
@@ -96,4 +93,7 @@ public class HashTable implements Serializable {
         return true;
     }
 
+    public int getCollisionsCount() {
+        return collisionsCount;
+    }
 }

@@ -26,6 +26,10 @@ public class Aktie implements Serializable {
     private String kuerzel;
     private List<KursDatei> kursDaten;
 
+    public Aktie(String name) {
+        this.name = name;
+    }
+
     public Aktie(String name, String WKN, String kuerzel) {
         this.name = name;
         this.WKN = WKN;
